@@ -1,0 +1,30 @@
+providers:
+  # Example Exa configuration. Adjust `base_url` and any extra parameters
+  # to match the deployed Exa API you want to benchmark.
+  - name: exa
+    type: exa
+    api_key_env: EXA_API_KEY
+    base_url: https://api.exa.ai/search
+    # Optional: provider-specific default top_k
+    default_top_k: 10
+
+  # Example of a generic JSON HTTP search API.
+  # You can adapt this to providers like custom search gateways, etc.
+  - name: other_search
+    type: generic_json_http
+    api_key_env: OTHER_API_KEY
+    api_key_header: Authorization
+    base_url: https://api.example.com/search
+    method: GET
+    query_param: q
+    # Path (dot-separated) to the list of results inside the JSON response.
+    # For example, if the response is {"data": {"results": [...]}} use "data.results".
+    result_path: results
+    # Fields used to extract information for each result object.
+    url_field: url
+    title_field: title
+    snippet_field: snippet
+    score_field: score
+    default_top_k: 10
+
+
