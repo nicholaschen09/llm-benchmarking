@@ -50,7 +50,7 @@ export default function Page() {
 
           <section className="metrics-card" aria-label="MARB results explorer">
             <div className="metrics-header">
-              <p className="metrics-title">Software engineering</p>
+              <p className="metrics-title">Retrieval for software engineering</p>
               <p className="metrics-subtitle">MARB snapshot · 8 tasks</p>
             </div>
 
