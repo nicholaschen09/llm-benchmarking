@@ -10,42 +10,54 @@ from ..clients.base import SearchClient, SearchResult
 from .base import Agent, AgentTask
 
 
-def _openai_chat(
+def _gemini_chat(
     messages: List[Dict[str, str]],
     model: str,
-    api_key_env: str = "OPENAI_API_KEY",
+    api_key_env: str = "GEMINI_API_KEY",
 ) -> str:
     """
-    Minimal wrapper around the OpenAI chat completions HTTP API.
+    Minimal wrapper around the Gemini generateContent HTTP API.
     """
     api_key = os.environ.get(api_key_env)
     if not api_key:
         raise ValueError(
-            f"Missing OpenAI API key: set {api_key_env} in your environment "
+            f"Missing Gemini API key: set {api_key_env} in your environment "
             "to run the agent."
         )
 
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    }
+    # Convert OpenAI-style messages into Gemini 'contents'.
+    contents: List[Dict[str, Any]] = []
+    for msg in messages:
+        role = msg.get("role", "user")
+        text = msg.get("content", "")
+        gemini_role = "user" if role == "user" else "model"
+        contents.append(
+            {
+                "role": gemini_role,
+                "parts": [{"text": text}],
+            }
+        )
+
     payload: Dict[str, Any] = {
-        "model": model,
-        "messages": messages,
-        "temperature": 0.2,
+        "contents": contents,
+        "generationConfig": {
+            "temperature": 0.2,
+        },
     }
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
     resp = requests.post(
-        "https://api.openai.com/v1/chat/completions",
+        url,
+        params={"key": api_key},
         json=payload,
-        headers=headers,
         timeout=60,
     )
     resp.raise_for_status()
     data = resp.json()
     try:
-        return data["choices"][0]["message"]["content"]
+        return data["candidates"][0]["content"]["parts"][0]["text"]
     except (KeyError, IndexError, TypeError):
-        raise RuntimeError(f"Unexpected OpenAI response format: {data!r}")
+        raise RuntimeError(f"Unexpected Gemini response format: {data!r}")
 
 
 @dataclass
