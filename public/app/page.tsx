@@ -108,7 +108,7 @@ export default function Page() {
             </li>
             <li>
               <strong>Retrieval:</strong> The benchmark calls a configured web search
-              API (e.g. Exa, Bing, SerpAPI, Brave) with those queries and collects top-k
+              API (e.g. Exa, Parallel, Bing, SerpAPI, Brave) with those queries and collects top-k
               results (URLs, titles, snippets).
             </li>
             <li>
@@ -146,6 +146,9 @@ export default function Page() {
             <li>
               <strong>Exa</strong> – via the <code>/search</code> API and an{" "}
               <code>EXA_API_KEY</code>.
+            </li>
+            <li>
+              <strong>Parallel</strong> – via their Search API (<code>PARALLEL_API_KEY</code>).
             </li>
             <li>
               <strong>Bing Web Search</strong> – Azure Cognitive Services.
