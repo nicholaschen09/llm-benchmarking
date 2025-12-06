@@ -28,4 +28,10 @@ build/
 dist/
 *.egg-info/
 
+# Node / Next.js
+node_modules/
+.next/
+marb-blog/node_modules/
+marb-blog/.next/
+
 
