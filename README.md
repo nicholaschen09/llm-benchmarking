@@ -13,6 +13,18 @@ The core question: **“If I plug Exa into my agent instead of a generic web sea
 
 ---
 
+## Key resources
+
+- **Exa docs**: [Exa – Getting Started](https://docs.exa.ai/reference/getting-started)
+- **Gemini API** (LLM backbone): [Gemini API overview](https://ai.google.dev/gemini-api/docs)
+- **Parallel Search API**: [Parallel Search API blog](https://parallel.ai/blog/parallel-search-api)
+- **SerpAPI**: [SerpAPI documentation](https://serpapi.com/)
+- **Tavily Search API**: [Tavily API docs](https://tavily.com/docs/api)
+- **Brave Search API**: [Brave Search API docs](https://api.search.brave.com/app/documentation)
+- **MARB tasks file**: [`exa_benchmark/datasets/marb_tasks.jsonl`](exa_benchmark/datasets/marb_tasks.jsonl)
+
+---
+
 ## What this benchmark measures
 
 - **Task success rate**: For each provider, what percentage of multi-step tasks are solved by an agent?
@@ -182,6 +194,11 @@ and model updates.
 - `config/`
   - `providers.example.yaml` — template for configuring providers.
 - `requirements.txt`
+
+There is also a lightweight **Next.js blog** under `public/app` that explains MARB
+conceptually and shows a visual snapshot of benchmark results. You can deploy this as a
+static site (e.g. Vercel) or run it locally with the standard Next.js dev server if you
+wire it into a full Next.js app.
 
 ---
 
