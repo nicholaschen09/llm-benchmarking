@@ -39,7 +39,7 @@ body {
 }
 
 .page-hero {
-  padding: 3rem 0 2.5rem;
+  padding: 2.5rem 0 1.5rem;
 }
 
 .page-hero-title {
@@ -57,7 +57,7 @@ body {
 }
 
 .page-section {
-  margin-top: 2.5rem;
+  margin-top: 1.25rem;
   max-width: 40rem;
   color: #111827;
 }

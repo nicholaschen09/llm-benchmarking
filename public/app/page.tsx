@@ -16,7 +16,6 @@ export default function Page() {
         </section>
 
         <section className="page-section">
-          <p className="page-eyebrow">Overview</p>
           <h2>Why a benchmark for Exa & agentic workflows?</h2>
           <p>
             Exa is a search engine made for AIs, with APIs like{" "}
@@ -46,7 +45,6 @@ export default function Page() {
         </section>
 
         <section className="page-section">
-          <p className="page-eyebrow">Benchmark idea</p>
           <h2>MARB: Multi-Step Agent Retrieval Benchmark</h2>
           <p>
             MARB is a small but realistic benchmark that evaluates web search in
@@ -82,7 +80,6 @@ export default function Page() {
         </section>
 
         <section className="page-section">
-          <p className="page-eyebrow">Setup</p>
           <h2>Agent loop & evaluation protocol</h2>
           <p>
             The benchmark uses a very simple, model-agnostic agent loop with
@@ -118,7 +115,6 @@ export default function Page() {
         </section>
 
         <section className="page-section">
-          <p className="page-eyebrow">Providers</p>
           <h2>Comparing Exa against baseline web search</h2>
           <p>
             The reference MARB implementation is intentionally{" "}
@@ -156,7 +152,6 @@ export default function Page() {
         </section>
 
         <section className="page-section">
-          <p className="page-eyebrow">Why this is convincing</p>
           <h2>Mapping search quality to real engineering outcomes</h2>
           <p>
             MARB is deliberately small and opinionated rather than exhaustive.
@@ -176,41 +171,11 @@ export default function Page() {
           </p>
         </section>
 
-        <section className="page-section">
-          <p className="page-eyebrow">How to run it yourself</p>
-          <p>
-            The full MARB code lives in the main Python repo. Once you have
-            Python and your API keys, you can run:
-          </p>
-          <pre className="page-code">
-            <code>
-              cd exa-benchmarking{"\n"}
-              python -m venv .venv{"\n"}
-              source .venv/bin/activate{"\n"}
-              pip install -r requirements.txt{"\n"}
-              {"\n"}
-              export EXA_API_KEY=...{"\n"}
-              export GEMINI_API_KEY=...{"\n"}
-              export BING_API_KEY=...{"\n"}
-              export SERPAPI_API_KEY=...{"\n"}
-              export BRAVE_API_KEY=...{"\n"}
-              {"\n"}
-              python -m exa_benchmark.cli \{"\n"}
-              {"  "}--provider none \{"\n"}
-              {"  "}--provider exa \{"\n"}
-              {"  "}--provider bing \{"\n"}
-              {"  "}--provider serpapi \{"\n"}
-              {"  "}--provider brave \{"\n"}
-              {"  "}--tasks marb_tasks{"\n"}
-            </code>
-          </pre>
-        </section>
-
         <section className="author">
           <p className="author-title">By Nicholas Chen</p>
           <div className="author-links">
             <Link
-              href="mailto:nicholas@example.com"
+              href="mailto:nicholas.chen243@gmail.com"
               className="author-pill"
               aria-label="Email"
             >
@@ -219,9 +184,24 @@ export default function Page() {
                 aria-hidden="true"
                 className="author-icon"
               >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="14"
+                  rx="2"
+                  ry="2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                />
                 <path
-                  fill="currentColor"
-                  d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 2v.17l8 4.8 8-4.8V7H4Zm0 10h16V9.83l-7.4 4.44a2 2 0 0 1-2.1 0L4 9.83V17Z"
+                  d="M5 8.5 12 13l7-4.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </Link>
@@ -242,7 +222,7 @@ export default function Page() {
               </svg>
             </Link>
             <Link
-              href="https://x.com"
+              href="https://x.com/nicholaschen__"
               className="author-pill"
               aria-label="Twitter / X"
             >
@@ -258,7 +238,7 @@ export default function Page() {
               </svg>
             </Link>
             <Link
-              href="https://www.linkedin.com"
+              href="https://www.linkedin.com/in/nicholas-chen-85886726a/"
               className="author-pill"
               aria-label="LinkedIn"
             >
