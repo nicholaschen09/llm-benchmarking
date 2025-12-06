@@ -116,7 +116,7 @@ export default function Page() {
             <code>/contents</code> that surface high-signal technical content for models
             to consume directly{" "}
             <span>
-              (see the official docs for more:
+              (see the official docs for more:{" "}
               <Link
                 href="https://docs.exa.ai/reference/getting-started"
                 className="underline underline-offset-4"
@@ -224,8 +224,14 @@ def run_agent(task, search_client, model):
           </ol>
           <p>
             To stay focused on retrieval, MARB keeps the LLM backbone fixed (in the
-            reference implementation, a <strong>Gemini 2.5 Flash</strong> model via <code>GEMINI_API_KEY</code>)
-            and only swaps out the search provider.
+            reference implementation, a{" "}
+            <Link
+              href="https://ai.google.dev/gemini-api/docs"
+              className="underline underline-offset-4"
+            >
+              Gemini 2.5 Flash
+            </Link>{" "}
+            model via <code>GEMINI_API_KEY</code>) and only swaps out the search provider.
           </p>
           <p>
             Each task comes with lightweight <strong>success criteria</strong>. We use deterministic keyword matching as a proxy for correctness. For example, if a task asks to "extract text from PDFs", finding <code>pytesseract</code> or <code>pdf2image</code> in the answer counts as a success. This avoids the variance and cost of "LLM-as-a-judge" while remaining directionally accurate for engineering tasks.
@@ -263,16 +269,44 @@ def run_agent(task, search_client, model):
               <strong>No search</strong> – Baseline. The agent relies only on its pretraining.
             </li>
             <li>
-              <strong>Exa</strong> – via the <code>/search</code> API.
+              <strong>Exa</strong> – via the <code>/search</code> API (
+              <Link
+                href="https://docs.exa.ai/reference/getting-started"
+                className="underline underline-offset-4"
+              >
+                docs
+              </Link>
+              ).
             </li>
             <li>
-              <strong>Parallel</strong> – via their Search API.
+              <strong>Parallel</strong> – via their Search API (
+              <Link
+                href="https://parallel.ai/blog/parallel-search-api"
+                className="underline underline-offset-4"
+              >
+                docs
+              </Link>
+              ).
             </li>
             <li>
-              <strong>Brave Search API</strong> – privacy-focused web search.
+              <strong>Brave Search API</strong> – privacy-focused web search (
+              <Link
+                href="https://api.search.brave.com/app/documentation"
+                className="underline underline-offset-4"
+              >
+                docs
+              </Link>
+              ).
             </li>
             <li>
-              <strong>SerpAPI</strong> – a meta-search wrapper around Google and others.
+              <strong>SerpAPI</strong> – a meta-search wrapper around Google and others (
+              <Link
+                href="https://serpapi.com/"
+                className="underline underline-offset-4"
+              >
+                docs
+              </Link>
+              ).
             </li>
           </ul>
           <p>
@@ -412,6 +446,68 @@ python -m exa_benchmark.cli \\
             Agents need structured, actionable information with working code examples, not just conceptual explanations.
             Providers that optimize for these needs—like Exa&apos;s focus on technical content—consistently outperform generic web search on engineering tasks.
           </p>
+        </section>
+
+        <section className="page-section">
+          <h2>References</h2>
+          <ul className="references-list">
+            <li>
+              <Link
+                href="https://docs.exa.ai/reference/getting-started"
+                className="underline underline-offset-4"
+              >
+                Exa – Getting Started (search API docs)
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://ai.google.dev/gemini-api/docs"
+                className="underline underline-offset-4"
+              >
+                Gemini API documentation
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://parallel.ai/blog/parallel-search-api"
+                className="underline underline-offset-4"
+              >
+                Parallel Search API
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://serpapi.com/"
+                className="underline underline-offset-4"
+              >
+                SerpAPI documentation
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://tavily.com/docs/api"
+                className="underline underline-offset-4"
+              >
+                Tavily Search API docs
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://api.search.brave.com/app/documentation"
+                className="underline underline-offset-4"
+              >
+                Brave Search API documentation
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://github.com/nicholaschen09/llm-benchmarking"
+                className="underline underline-offset-4"
+              >
+                MARB benchmark repository (this project)
+              </Link>
+            </li>
+          </ul>
         </section>
 
         <section className="author">

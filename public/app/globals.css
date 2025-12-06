@@ -313,3 +313,19 @@ code {
 .page-code code {
   font-family: inherit;
 }
+
+.references-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+.references-list li {
+  margin-bottom: 0.4rem;
+}
+
+.references-list a {
+  color: #111827;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
