@@ -45,13 +45,21 @@ def _gemini_chat(
         },
     }
 
+    # Follow the official Gemini REST pattern:
+    # https://ai.google.dev/gemini-api/docs (v1beta, x-goog-api-key header).
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+    headers = {
+        "x-goog-api-key": api_key,
+        "Content-Type": "application/json",
+    }
     resp = requests.post(
         url,
-        params={"key": api_key},
+        headers=headers,
         json=payload,
         timeout=60,
     )
+    if not resp.ok:
+        print(f"Gemini API Error: {resp.status_code} - {resp.text}")
     resp.raise_for_status()
     data = resp.json()
     try:
@@ -74,7 +82,9 @@ class SimpleLLMAgent(Agent):
     """
 
     name: str = "simple_llm_agent"
-    model: str = "gemini-1.5-flash"
+    # Default to a broadly available Gemini model; override via constructor if needed.
+    # See: https://ai.google.dev/gemini-api/docs
+    model: str = "gemini-2.5-flash"
     api_key_env: str = "GEMINI_API_KEY"
     max_search_queries: int = 2
     top_k_docs: int = 5
