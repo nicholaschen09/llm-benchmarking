@@ -88,6 +88,7 @@ def make_search_client(provider_name: str, cfg: dict) -> SearchClient | None:
             method=p_cfg.get("method", "GET"),
             api_key_env=p_cfg.get("api_key_env"),
             api_key_header=p_cfg.get("api_key_header"),
+            api_key_query_param=p_cfg.get("api_key_query_param"),
             query_param=p_cfg.get("query_param", "q"),
             result_path=p_cfg.get("result_path", "results"),
             url_field=p_cfg.get("url_field", "url"),
