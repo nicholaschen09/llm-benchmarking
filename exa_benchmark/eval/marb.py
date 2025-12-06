@@ -128,6 +128,7 @@ def run_marb_for_provider(
     cfg: dict,
     tasks: Sequence[AgentTask],
     agent: SimpleLLMAgent | None = None,
+    tqdm_position: int | None = None,
 ) -> MarbResult:
     """
     Run MARB for a single provider (including the special 'none' provider).
@@ -138,7 +139,15 @@ def run_marb_for_provider(
     search_client = make_search_client(provider_name, cfg)
     solved = 0
 
-    for task in tqdm(tasks, desc=f"Provider={provider_name}", unit="task"):
+    # Each provider gets its own progress bar position so that, when
+    # run in parallel, tqdm shows one bar per provider simultaneously.
+    for task in tqdm(
+        tasks,
+        desc=f"Provider={provider_name}",
+        unit="task",
+        position=tqdm_position,
+        leave=True,
+    ):
         answer = agent.run_task(task, search_client)
         if task_solved(answer, task):
             solved += 1
@@ -162,6 +171,33 @@ def format_marb_results(results: Iterable[MarbResult]) -> str:
             f"{res.provider_name:<15} {res.agent_name:<20} "
             f"{res.num_solved:<10d} {res.num_tasks:<10d} {pct:<10.1f}"
         )
+
+    # Add improvements section
+    rows.append("\n" + "=" * 70)
+    rows.append("Potential Improvements:")
+    rows.append("-" * 70)
+
+    improvements = []
+    for res in results:
+        pct = 100.0 * res.success_rate
+        if pct < 50:
+            improvements.append(f"• {res.provider_name}: Consider improving query formulation and relevance scoring")
+        elif pct < 70:
+            improvements.append(f"• {res.provider_name}: Focus on better context extraction and answer precision")
+        elif pct < 90:
+            improvements.append(f"• {res.provider_name}: Fine-tune retrieval parameters and result filtering")
+        else:
+            improvements.append(f"• {res.provider_name}: Already performing well, minor optimizations possible")
+
+    if improvements:
+        rows.extend(improvements)
+
+    rows.append("\nGeneral Recommendations:")
+    rows.append("• Analyze failed tasks to identify common patterns")
+    rows.append("• Experiment with different search query strategies")
+    rows.append("• Consider implementing result re-ranking mechanisms")
+    rows.append("• Test with varying context window sizes for better accuracy")
+
     return "\n".join(rows)
 
 

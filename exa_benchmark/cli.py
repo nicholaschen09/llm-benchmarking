@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 import yaml
 from dotenv import load_dotenv
@@ -71,12 +72,33 @@ def main(argv: List[str] | None = None) -> None:
     t_path = tasks_path(args.tasks)
     tasks = load_marb_tasks(t_path)
 
-    results = []
-    for provider_name in args.providers:
-        res = run_marb_for_provider(provider_name, cfg, tasks)
-        results.append(res)
+    # Run each provider's MARB evaluation in parallel threads so that
+    # search + LLM calls overlap instead of running strictly one after another.
+    # Using threads (not processes) lets tqdm render one progress bar per provider.
+    results_by_provider: Dict[str, object] = {}
 
-    print(format_marb_results(results))
+    with ThreadPoolExecutor() as executor:
+        futures = {}
+        for idx, provider_name in enumerate(args.providers):
+            fut = executor.submit(
+                run_marb_for_provider,
+                provider_name,
+                cfg,
+                tasks,
+                None,
+                idx,  # tqdm_position
+            )
+            futures[fut] = provider_name
+
+        for fut, provider_name in futures.items():
+            # Wait for each provider run to complete and store by name
+            res = fut.result()
+            results_by_provider[provider_name] = res
+
+    # Preserve the CLI order when printing the table
+    ordered_results = [results_by_provider[name] for name in args.providers]
+
+    print(format_marb_results(ordered_results))
 
 
 if __name__ == "__main__":
