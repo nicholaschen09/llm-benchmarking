@@ -349,6 +349,61 @@ python -m exa_benchmark.cli \\
           </p>
         </section>
 
+        <section className="page-section">
+          <h2>How to improve benchmark performance</h2>
+          <p>
+            Based on the results from MARB, here are several strategies to improve search provider performance on agent-based tasks:
+          </p>
+
+          <h3>For providers scoring below 70%</h3>
+          <ul>
+            <li>
+              Improve query understanding: Focus on better semantic parsing of technical queries and domain-specific terminology.
+            </li>
+            <li>
+              Enhance result relevance: Implement better ranking algorithms that prioritize authoritative technical documentation and recent content.
+            </li>
+            <li>
+              Optimize snippet extraction: Ensure snippets contain actionable code examples and configuration patterns, not just descriptions.
+            </li>
+          </ul>
+
+          <h3>For providers scoring 70-85%</h3>
+          <ul>
+            <li>
+              Fine-tune context windows: Experiment with different amounts of context returned to balance comprehensiveness with relevance.
+            </li>
+            <li>
+              Add re-ranking mechanisms: Implement a second-pass ranking based on task-specific signals like recency, code presence, and source authority.
+            </li>
+            <li>
+              Support structured queries: Allow agents to specify filters like date ranges, file types, or specific domains for more targeted results.
+            </li>
+          </ul>
+
+          <h3>For all providers</h3>
+          <ul>
+            <li>
+              Analyze failure patterns: Review tasks that commonly fail to identify gaps in coverage or retrieval strategy.
+            </li>
+            <li>
+              Implement query expansion: Automatically expand technical terms with synonyms and related concepts (e.g., "k8s" → "Kubernetes").
+            </li>
+            <li>
+              Cache and learn from usage: Build provider-specific knowledge of what types of queries work best and optimize accordingly.
+            </li>
+            <li>
+              Consider hybrid approaches: Combine multiple search strategies (semantic + keyword) or multiple providers for better coverage.
+            </li>
+          </ul>
+
+          <p>
+            The key insight from MARB is that <strong>agent-oriented search differs from human search</strong>.
+            Agents need structured, actionable information with working code examples, not just conceptual explanations.
+            Providers that optimize for these needs—like Exa&apos;s focus on technical content—consistently outperform generic web search on engineering tasks.
+          </p>
+        </section>
+
         <section className="author">
           <p className="author-title">By Nicholas Chen</p>
           <div className="author-links">
