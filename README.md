@@ -1,3 +1,4 @@
+![exa](https://github.com/user-attachments/assets/3248bc00-1e91-4c2e-a054-863daf315b26)
 ## Multi-Step Agent Retrieval Benchmark (MARB)
 
 This repo contains a small, extensible benchmark to compare web search APIs in the context of **LLM agents** solving realistic, multi-step software tasks.
