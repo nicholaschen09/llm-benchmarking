@@ -6,12 +6,12 @@ export default function Page() {
       <div className="page-inner">
         <section className="page-hero">
           <h1 className="page-hero-title">
-            We built an agent benchmark around Exa-style semantic retrieval.
+            I built an agent benchmark around Exa-style semantic retrieval.
           </h1>
           <p className="page-hero-subtitle">
-            Multi-Step Agent Retrieval Benchmark (MARB) evaluates how much better
-            LLM agents perform on real coding and infra tasks when you swap in Exa
-            search instead of generic web search—or no search at all.
+            The Multi-Step Agent Retrieval Benchmark (MARB) evaluates how much
+            better LLM agents perform on real coding and infra tasks when you swap
+            in Exa search instead of generic web search—or no search at all.
           </p>
         </section>
 
@@ -206,10 +206,76 @@ export default function Page() {
           </pre>
         </section>
 
-        <footer className="page-footer">
-          <span>MARB – Multi-Step Agent Retrieval Benchmark</span>
-          <span>Built for Exa-style search APIs and LLM agents.</span>
-        </footer>
+        <section className="author">
+          <p className="author-title">By Nicholas Chen</p>
+          <div className="author-links">
+            <Link
+              href="mailto:nicholas@example.com"
+              className="author-pill"
+              aria-label="Email"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="author-icon"
+              >
+                <path
+                  fill="currentColor"
+                  d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 2v.17l8 4.8 8-4.8V7H4Zm0 10h16V9.83l-7.4 4.44a2 2 0 0 1-2.1 0L4 9.83V17Z"
+                />
+              </svg>
+            </Link>
+            <Link
+              href="https://github.com/nicholaschen09"
+              className="author-pill"
+              aria-label="GitHub"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="author-icon"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.36 6.84 9.72.5.1.68-.22.68-.5 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.9 1.57 2.36 1.12 2.94.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.09 0-1.12.39-2.04 1.03-2.76-.1-.26-.45-1.32.1-2.75 0 0 .84-.28 2.75 1.05a9.24 9.24 0 0 1 2.5-.35c.85 0 1.7.12 2.5.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.43.2 2.49.1 2.75.64.72 1.03 1.64 1.03 2.76 0 3.96-2.34 4.82-4.57 5.08.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"
+                />
+              </svg>
+            </Link>
+            <Link
+              href="https://x.com"
+              className="author-pill"
+              aria-label="Twitter / X"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="author-icon"
+              >
+                <path
+                  fill="currentColor"
+                  d="M18.25 3H21L14.5 10.39 22 21h-5.5l-4.23-6.06L7.4 21H4.65l6.93-7.86L4 3h5.62l3.78 5.4L18.25 3Zm-1.93 16.18h1.46L7.76 4.73H6.19l10.13 14.45Z"
+                />
+              </svg>
+            </Link>
+            <Link
+              href="https://www.linkedin.com"
+              className="author-pill"
+              aria-label="LinkedIn"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="author-icon"
+              >
+                <path
+                  fill="currentColor"
+                  d="M6.09 4.5A1.84 1.84 0 1 1 2.4 4.5a1.84 1.84 0 0 1 3.68 0ZM2.6 8.18h2.98V21H2.6V8.18ZM9.26 8.18h2.86v1.75h.04c.4-.76 1.4-1.56 2.88-1.56 3.07 0 3.64 2.02 3.64 4.64V21h-3v-6.6c0-1.57-.03-3.6-2.19-3.6-2.19 0-2.53 1.7-2.53 3.48V21h-3V8.18Z"
+                />
+              </svg>
+            </Link>
+          </div>
+        </section>
+
       </div>
     </main>
   );
