@@ -36,6 +36,7 @@ providers:
     type: generic_json_http
     api_key_env: SERPAPI_API_KEY
     api_key_header: ""
+    api_key_query_param: api_key
     base_url: https://serpapi.com/search
     method: GET
     query_param: q

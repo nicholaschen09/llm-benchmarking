@@ -25,6 +25,8 @@ class GenericHTTPClient(SearchClient):
     method: str = "GET"
     api_key_env: str | None = None
     api_key_header: str | None = None
+    # For APIs like SerpAPI that expect the key as a query parameter (e.g. ?api_key=...).
+    api_key_query_param: str | None = None
     query_param: str = "q"
     result_path: str = "results"
     url_field: str = "url"
@@ -75,11 +77,18 @@ class GenericHTTPClient(SearchClient):
     def search(self, query: str, top_k: int = 10) -> List[SearchResult]:
         k = top_k or self.default_top_k
 
+        # Base params/payload for the query.
+        api_key = os.environ.get(self.api_key_env) if self.api_key_env else None
+
         if self.method.upper() == "GET":
             params = {self.query_param: query, "num_results": k}
+            if api_key and self.api_key_query_param:
+                params[self.api_key_query_param] = api_key
             resp = requests.get(self.base_url, params=params, headers=self._headers(), timeout=30)
         else:
             payload = {self.query_param: query, "num_results": k}
+            if api_key and self.api_key_query_param:
+                payload[self.api_key_query_param] = api_key
             resp = requests.post(self.base_url, json=payload, headers=self._headers(), timeout=30)
 
         resp.raise_for_status()
