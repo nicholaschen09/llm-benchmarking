@@ -1,29 +1,30 @@
-## Exa ML Troubleshooting Search Benchmark
+## Multi-Step Agent Retrieval Benchmark (MARB)
 
-This repo contains a small, extensible benchmark to compare web search APIs on a concrete, high‑value developer task:
-**finding the right resource to debug ML / infra issues quickly**.
+This repo contains a small, extensible benchmark to compare web search APIs in the context of **LLM agents** solving realistic, multi-step software tasks.
 
-Instead of measuring generic embedding quality (like MTEB), this benchmark focuses on a narrow but important vertical:
-queries about PyTorch / TensorFlow errors, distributed training failures, CUDA issues, data bugs, and other ML engineering problems.
-For each query, we provide one or more **ground‑truth URLs** that practitioners typically use to resolve the issue
-(GitHub issues, forum threads, StackOverflow answers, blog posts, etc.).
+Instead of testing generic embedding quality (like MTEB), MARB focuses on a narrow but important vertical:
+agents that use web search to complete coding and infra workflows. Each task requires several hops of reasoning, such as:
 
-The core question: **“Given a real ML debugging query, how quickly does a search API surface the best troubleshooting resource?”**
+- **“Find a Python library for OCR, read the docs, and write code to extract text from PDFs.”**
+- **“Find recent best practices for Dockerfiles and optimize this example file.”**
+
+The core question: **“If I plug Exa into my agent instead of a generic web search API (or no search at all), do I solve more multi-step tasks end-to-end?”**
 
 ---
 
 ## What this benchmark measures
 
-- **Hit rate / Recall@k**: Does any ground‑truth URL appear in the top‑k results?
-- **MRR@k**: How early in the ranked list does a relevant result appear?
-- **Domain awareness** (optional analysis): How often does the search engine surface “expert” pages
-  (e.g., GitHub issues, official docs, well‑known ML blogs) instead of generic SEO pages?
+- **Task success rate**: For each provider, what percentage of multi-step tasks are solved by an agent?
+- **Impact of search**:
+  - **No search** (agent relies only on its pretraining).
+  - **Generic web search** (e.g., Bing / custom search API).
+  - **Exa search** (optimized for technical content).
 
 Why this is useful for Exa:
 
-- ML / infra debugging is a high‑value, time‑sensitive workflow where better search results map directly to engineering time saved.
-- Exa is optimized for technical content (code, repos, issues), so it should shine on queries whose answers live in GitHub, docs, and forums.
-- The framework is **API‑agnostic**: you can plug in Exa and other providers (e.g., traditional web search APIs) and compare.
+- Many customers care about **agentic workflows**, not just single-turn Q&A.
+- MARB directly tests “model → search → model” loops where high-quality technical results matter (docs, GitHub issues, blog posts).
+- The framework is **API‑agnostic**: you can plug in Exa and other search providers and compare their effect on agent success.
 
 ---
 
@@ -73,26 +74,33 @@ export EXA_API_KEY="..."
 export OTHER_API_KEY="..."
 ```
 
-### 3. Run the eval
+### 3. Run MARB
 
-Run the main CLI with a chosen provider and dataset:
+The main comparison is between:
 
-```bash
-python -m exa_benchmark.cli \
-  --provider exa \
-  --dataset ml_troubleshooting
-```
+- `none` (no web search),
+- `exa` (Exa search),
+- and any other configured provider (e.g., `bing`).
 
-You’ll see per‑query results and aggregate metrics like Hit@k and MRR@k.
-
-To compare multiple providers side by side:
+Run the benchmark:
 
 ```bash
 python -m exa_benchmark.cli \
+  --provider none \
   --provider exa \
   --provider other_search \
-  --dataset ml_troubleshooting
+  --tasks marb_tasks
 ```
+
+This will:
+
+- Load a small set of **multi-step tasks** from `marb_tasks.jsonl`.
+- For each provider, run a simple two-step agent loop:
+  - The agent first asks the model for search queries.
+  - It then runs those queries through the chosen search API.
+  - Finally, it asks the model to solve the task using the retrieved docs.
+- Compute **task success rate** per provider based on automatic heuristics
+  (e.g., checking for expected libraries or config snippets in the answer).
 
 ---
 
@@ -103,50 +111,55 @@ python -m exa_benchmark.cli \
     - `base.py` — abstract `SearchClient` interface.
     - `exa_client.py` — concrete client for the Exa search API.
     - `generic_http_client.py` — simple configurable HTTP client for other search APIs.
+  - `agents/`
+    - `base.py` — `AgentTask` definition and `Agent` protocol.
+    - `simple_llm_agent.py` — a small two-step LLM agent using OpenAI-style chat completions.
   - `datasets/`
-    - `ml_troubleshooting.jsonl` — small seed dataset of ML / infra debugging queries with ground‑truth URLs.
+    - `marb_tasks.jsonl` — seed tasks for the Multi-Step Agent Retrieval Benchmark.
   - `eval/`
-    - `metrics.py` — implementations of Hit@k, Recall@k, MRR@k, etc.
-    - `runner.py` — core evaluation loop.
-  - `cli.py` — command‑line entrypoint.
+    - `marb.py` — MARB runner and success-rate computation.
+    - `metrics.py`, `runner.py` — (legacy) single-query search metrics, kept for reference.
+  - `cli.py` — MARB command-line entrypoint.
 - `config/`
   - `providers.example.yaml` — template for configuring providers.
 - `requirements.txt`
 
 ---
 
-## Dataset design
+## Task design (MARB)
 
-The initial dataset `ml_troubleshooting.jsonl` is intentionally **small but high‑quality**,
-designed to simulate realistic ML engineer workflows. Each record has:
+The initial task set `marb_tasks.jsonl` is intentionally **small but high‑quality**,
+designed to simulate realistic agent workflows. Each record has:
 
 - `id`: a unique identifier.
-- `query`: a natural‑language search query (often copied from an error message).
-- `relevant_urls`: a list of URLs that practitioners actually use to resolve the issue.
-- `notes`: free‑text explanation of why these URLs are good answers.
+- `instruction`: a natural-language, multi-step task description.
+- `input_context`: optional code/config snippet to modify or build on.
+- `success_keywords`: key tokens that should appear in a successful answer
+  (e.g., specific library imports, YAML keys, or API names).
+- `search_hint`: optional starting point for the agent’s search planning.
+- `notes`: free-text explanation of what is being tested.
 
-Examples of query categories:
+Examples of task categories:
 
-- PyTorch / TensorFlow runtime errors (shape mismatches, device errors, mixed precision issues).
-- CUDA / GPU issues (out‑of‑memory, driver mismatches, NCCL init failures).
-- Distributed training and orchestration (DDP, DeepSpeed, Ray, Kubernetes pods, Slurm).
-- Data / input bugs (corrupted images, NaNs, exploding gradients).
-
-Evaluation treats any hit on `relevant_urls` as a success for Hit@k / Recall@k and uses the first hit’s rank for MRR.
+- Library discovery + code synthesis (e.g., Python OCR for PDFs).
+- DevOps best practices (Dockerfiles, GitHub Actions, Kubernetes HPAs).
+- Backend / API hardening (FastAPI security, rate limiting).
+- Tooling and infra (modern testing setups, logging, LLM eval harnesses).
 
 ---
 
 ## How to extend
 
-- **Add more tasks**: append lines to `exa_benchmark/datasets/ml_troubleshooting.jsonl`.
+- **Add more MARB tasks**: append lines to `exa_benchmark/datasets/marb_tasks.jsonl`.
   With more time, this could be scaled by:
-  - Mining real‑world ML error logs (with privacy filters).
-  - Using LLMs to propose candidate URLs, then manually curating.
+  - Mining real-world agent traces from internal tools (with privacy filters).
+  - Using LLMs to propose candidate tasks, then manually curating and pruning.
 - **Add new providers**: either implement a new `SearchClient` in `exa_benchmark/clients/`
   or configure a `generic_json_http` provider in `config/providers.yaml`.
-- **Richer metrics** (future work):
-  - Use an LLM to grade snippet‑level relevance from the result’s title/snippet/body.
-  - Track latency, rate‑limit behavior, and robustness to noisy queries.
+- **Richer judges** (future work):
+  - Replace the simple `success_keywords` heuristic with an LLM-as-a-judge
+    that scores answers given the task and reference notes.
+  - Track auxiliary metrics like number of search calls, total tokens, or latency.
 
 ---
 
@@ -154,14 +167,14 @@ Evaluation treats any hit on `relevant_urls` as a success for Hit@k / Recall@k a
 
 This project is intentionally scoped to something that can be built in ~12 hours:
 
-- A minimal but solid abstraction for pluggable search APIs.
-- A small, curated ML‑troubleshooting dataset with clear ground‑truth URLs.
-- A basic metrics suite (Hit@k, Recall@k, MRR@k) and CLI for running comparisons.
+- A minimal abstraction for pluggable search APIs.
+- A simple but realistic **agent loop** (model → search → model).
+- A small, curated MARB task set with automatic, keyword-based success checks.
 
 With more time, the natural next steps are:
 
-- Grow the dataset (including other verticals like “LLM app debugging” or “training infra on cloud X”).
-- Incorporate LLM‑based grading for nuanced relevance.
-- Build a simple dashboard for comparing providers across datasets and time.
+- Grow the task set (including domain-specific verticals for particular customers).
+- Swap in richer, LLM-based judges and structured scoring rubrics.
+- Instrument the agent loop with telemetry (latency, token counts, number of hops).
 
 
