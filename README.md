@@ -64,6 +64,11 @@ providers:
     api_key_env: PARALLEL_API_KEY
     # ... see comments in providers.example.yaml
 
+  - name: brave
+    type: generic_json_http
+    api_key_env: BRAVE_API_KEY
+    # ... see comments in providers.example.yaml
+
   - name: bing
     type: generic_json_http
     api_key_env: BING_API_KEY
@@ -86,6 +91,7 @@ Export your keys in the shell before running:
 export EXA_API_KEY="..."
 export GEMINI_API_KEY="..."
 export PARALLEL_API_KEY="..."
+export BRAVE_API_KEY="..."
 export BING_API_KEY="..."
 export SERPAPI_API_KEY="..."
 export BRAVE_API_KEY="..."
@@ -97,7 +103,7 @@ The main comparison is between:
 
 - `none` (no web search),
 - `exa` (Exa search),
-- and any other configured providers (e.g., `bing`, `serpapi`, `brave`).
+- and any other configured providers (e.g., `brave`, `serpapi`, `parallel`).
 
 Run the benchmark:
 
@@ -106,9 +112,8 @@ python -m exa_benchmark.cli \
   --provider none \
   --provider exa \
   --provider parallel \
-  --provider bing \
-  --provider serpapi \
   --provider brave \
+  --provider serpapi \
   --tasks marb_tasks
 ```
 
