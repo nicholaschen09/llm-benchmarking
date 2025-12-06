@@ -8,6 +8,13 @@ providers:
     # Optional: provider-specific default top_k
     default_top_k: 10
 
+  # Parallel Search API example.
+  - name: parallel
+    type: parallel
+    api_key_env: PARALLEL_API_KEY
+    base_url: https://api.parallel.ai/alpha/search
+    default_top_k: 10
+
   # Bing Web Search API (Azure Cognitive Services) example.
   - name: bing
     type: generic_json_http

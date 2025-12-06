@@ -59,6 +59,11 @@ providers:
     api_key_env: EXA_API_KEY
     # Optional: base_url, top_k, extra parameters
 
+  - name: parallel
+    type: parallel
+    api_key_env: PARALLEL_API_KEY
+    # ... see comments in providers.example.yaml
+
   - name: bing
     type: generic_json_http
     api_key_env: BING_API_KEY
@@ -80,6 +85,7 @@ Export your keys in the shell before running:
 ```bash
 export EXA_API_KEY="..."
 export GEMINI_API_KEY="..."
+export PARALLEL_API_KEY="..."
 export BING_API_KEY="..."
 export SERPAPI_API_KEY="..."
 export BRAVE_API_KEY="..."
@@ -99,6 +105,7 @@ Run the benchmark:
 python -m exa_benchmark.cli \
   --provider none \
   --provider exa \
+  --provider parallel \
   --provider bing \
   --provider serpapi \
   --provider brave \
