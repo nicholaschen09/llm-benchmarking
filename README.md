@@ -64,6 +64,11 @@ providers:
     api_key_env: PARALLEL_API_KEY
     # Parallel AI Search API
 
+  - name: tavily
+    type: tavily
+    api_key_env: TAVILY_API_KEY
+    # Tavily Search API
+
   - name: serpapi
     type: generic_json_http
     api_key_env: SERPAPI_API_KEY
@@ -91,6 +96,7 @@ GEMINI_API_KEY="..."
 PARALLEL_API_KEY="..."
 BRAVE_API_KEY="..."
 SERPAPI_API_KEY="..."
+TAVILY_API_KEY="..."
 # BING_API_KEY="..."  # only if you still use Bing
 ```
 
@@ -123,6 +129,7 @@ python -m exa_benchmark.cli \
   --provider exa \
   --provider parallel \
   --provider serpapi \
+  --provider tavily \
   --tasks marb_tasks
 ```
 

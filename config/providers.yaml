@@ -48,6 +48,20 @@ providers:
     score_field: ""
     default_top_k: 10
 
+  # Perplexity Search API example.
+  - name: perplexity
+    type: perplexity
+    api_key_env: PERPLEXITY_API_KEY
+    base_url: https://api.perplexity.ai/search
+    default_top_k: 5
+
+  # Tavily Search API example.
+  - name: tavily
+    type: tavily
+    api_key_env: TAVILY_API_KEY
+    base_url: https://api.tavily.com/search
+    default_top_k: 5
+
   # Brave Search API example.
   - name: brave
     type: generic_json_http

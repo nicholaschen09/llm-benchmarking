@@ -13,6 +13,7 @@ from ..clients.base import SearchClient
 from ..clients.exa_client import ExaClient
 from ..clients.generic_http_client import GenericHTTPClient
 from ..clients.parallel_client import ParallelClient
+from ..clients.tavily_client import TavilyClient
 
 
 @dataclass
@@ -79,6 +80,14 @@ def make_search_client(provider_name: str, cfg: dict) -> SearchClient | None:
             api_key=None,  # pulled from PARALLEL_API_KEY in __post_init__
             base_url=p_cfg.get("base_url", "https://api.parallel.ai/alpha/search"),
             default_top_k=int(p_cfg.get("default_top_k", 10)),
+        )
+
+    if p_type == "tavily":
+        return TavilyClient(
+            name=provider_name,
+            api_key=None,  # pulled from TAVILY_API_KEY in __post_init__
+            base_url=p_cfg.get("base_url", "https://api.tavily.com/search"),
+            default_top_k=int(p_cfg.get("default_top_k", 5)),
         )
 
     if p_type == "generic_json_http":

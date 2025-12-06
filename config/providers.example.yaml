@@ -64,3 +64,10 @@ providers:
     score_field: ""
     default_top_k: 10
 
+  # Tavily Search API example.
+  - name: tavily
+    type: tavily
+    api_key_env: TAVILY_API_KEY
+    base_url: https://api.tavily.com/search
+    default_top_k: 5
+
