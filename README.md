@@ -18,7 +18,7 @@ The core question: **“If I plug Exa into my agent instead of a generic web sea
 - **Task success rate**: For each provider, what percentage of multi-step tasks are solved by an agent?
 - **Impact of search**:
   - **No search** (agent relies only on its pretraining).
-  - **Generic web search** (e.g., Bing / custom search API).
+  - **Generic web search** (e.g., SerpAPI / Google, Brave, Parallel, or other APIs).
   - **Exa search** (optimized for technical content).
 
 Why this is useful for Exa:
@@ -50,7 +50,7 @@ Copy the example config and fill in your API keys:
 cp config/providers.example.yaml config/providers.yaml
 ```
 
-Then edit `config/providers.yaml` and add your credentials:
+Then edit `config/providers.yaml` and add your credentials (you can keep or remove providers you don't use):
 
 ```yaml
 providers:
@@ -62,39 +62,49 @@ providers:
   - name: parallel
     type: parallel
     api_key_env: PARALLEL_API_KEY
-    # ... see comments in providers.example.yaml
-
-  - name: brave
-    type: generic_json_http
-    api_key_env: BRAVE_API_KEY
-    # ... see comments in providers.example.yaml
-
-  - name: bing
-    type: generic_json_http
-    api_key_env: BING_API_KEY
-    # ... see comments in providers.example.yaml
+    # Parallel AI Search API
 
   - name: serpapi
     type: generic_json_http
     api_key_env: SERPAPI_API_KEY
-    # ... see comments in providers.example.yaml
+    # SerpAPI (Google results)
 
   - name: brave
     type: generic_json_http
     api_key_env: BRAVE_API_KEY
-    # ... see comments in providers.example.yaml
+    # Brave Search API (note: can be rate-limited on free tiers)
+
+  # Optional / legacy:
+  # - name: bing
+  #   type: generic_json_http
+  #   api_key_env: BING_API_KEY
+  #   # Bing Search API is being retired in Aug 2025 – see Microsoft lifecycle docs.
 ```
 
-Export your keys in the shell before running:
+You can either **use a `.env` file** (recommended) or export keys manually.
+
+Create a `.env` file at the repo root:
+
+```bash
+EXA_API_KEY="..."
+GEMINI_API_KEY="..."
+PARALLEL_API_KEY="..."
+BRAVE_API_KEY="..."
+SERPAPI_API_KEY="..."
+# BING_API_KEY="..."  # only if you still use Bing
+```
+
+Thanks to `python-dotenv`, these are loaded automatically by the CLI.
+
+Or export your keys in the shell before running:
 
 ```bash
 export EXA_API_KEY="..."
 export GEMINI_API_KEY="..."
 export PARALLEL_API_KEY="..."
 export BRAVE_API_KEY="..."
-export BING_API_KEY="..."
 export SERPAPI_API_KEY="..."
-export BRAVE_API_KEY="..."
+# export BING_API_KEY="..."
 ```
 
 ### 3. Run MARB
@@ -103,16 +113,15 @@ The main comparison is between:
 
 - `none` (no web search),
 - `exa` (Exa search),
-- and any other configured providers (e.g., `brave`, `serpapi`, `parallel`).
+- and any other configured providers (e.g., `serpapi`, `parallel`, optionally `brave` if you have quota).
 
-Run the benchmark:
+Run the benchmark (without Brave to avoid free-tier rate limits):
 
 ```bash
 python -m exa_benchmark.cli \
   --provider none \
   --provider exa \
   --provider parallel \
-  --provider brave \
   --provider serpapi \
   --tasks marb_tasks
 ```
