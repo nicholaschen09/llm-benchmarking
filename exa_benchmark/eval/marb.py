@@ -4,6 +4,7 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Sequence
+import time
 
 from tqdm import tqdm
 
@@ -22,6 +23,7 @@ class MarbResult:
     agent_name: str
     num_tasks: int
     num_solved: int
+    duration_seconds: float
 
     @property
     def success_rate(self) -> float:
@@ -139,6 +141,8 @@ def run_marb_for_provider(
     search_client = make_search_client(provider_name, cfg)
     solved = 0
 
+    start = time.perf_counter()
+
     # Each provider gets its own progress bar position so that, when
     # run in parallel, tqdm shows one bar per provider simultaneously.
     for task in tqdm(
@@ -152,24 +156,31 @@ def run_marb_for_provider(
         if task_solved(answer, task):
             solved += 1
 
+    duration = time.perf_counter() - start
+
     return MarbResult(
         provider_name=provider_name,
         agent_name=agent.name,
         num_tasks=len(tasks),
         num_solved=solved,
+        duration_seconds=duration,
     )
 
 
 def format_marb_results(results: Iterable[MarbResult]) -> str:
     rows: List[str] = []
-    header = f"{'Provider':<15} {'Agent':<20} {'Solved':<10} {'Total':<10} {'Success%':<10}"
+    header = (
+        f"{'Provider':<15} {'Agent':<20} "
+        f"{'Solved':<10} {'Total':<10} {'Success%':<10} {'Time (s)':<10}"
+    )
     rows.append(header)
     rows.append("-" * len(header))
     for res in results:
         pct = 100.0 * res.success_rate
         rows.append(
             f"{res.provider_name:<15} {res.agent_name:<20} "
-            f"{res.num_solved:<10d} {res.num_tasks:<10d} {pct:<10.1f}"
+            f"{res.num_solved:<10d} {res.num_tasks:<10d} "
+            f"{pct:<10.1f} {res.duration_seconds:<10.1f}"
         )
 
     # Add improvements section
