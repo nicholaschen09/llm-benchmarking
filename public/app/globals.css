@@ -8,8 +8,15 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Helvetica Neue", Arial, "Segoe UI", sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "Helvetica Neue",
+    Arial,
+    "Segoe UI",
+    sans-serif;
 }
 
 :root {
@@ -68,8 +75,8 @@ body {
 }
 
 .page-eyebrow {
-  font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  font-family:
+    ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.28em;
@@ -146,12 +153,10 @@ body {
 }
 
 code {
-  font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  font-family:
+    ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .page-code code {
   font-family: inherit;
 }
-
-
