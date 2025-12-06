@@ -113,7 +113,7 @@ export SERPAPI_API_KEY="..."
 # export BING_API_KEY="..."
 ```
 
-### 3. Run MARB
+### 3. Run MARB (providers run in parallel)
 
 The main comparison is between:
 
@@ -136,12 +136,30 @@ python -m exa_benchmark.cli \
 This will:
 
 - Load a small set of **multi-step tasks** from `marb_tasks.jsonl`.
-- For each provider, run a simple two-step agent loop:
+- For each provider, run a simple two-step agent loop **in parallel**:
   - The agent first asks the model for search queries.
   - It then runs those queries through the chosen search API.
   - Finally, it asks the model to solve the task using the retrieved docs.
-- Compute **task success rate** per provider based on automatic heuristics
-  (e.g., checking for expected libraries or config snippets in the answer).
+- While it runs, you&apos;ll see one progress bar per provider (e.g. `Provider=exa`,
+  `Provider=serpapi`, etc.), all advancing at the same time.
+- Compute **task success rate** and **wall‑clock runtime (seconds)** per provider based
+  on automatic heuristics (e.g., checking for expected libraries or config snippets in
+  the answer).
+
+At the end, you&apos;ll get a summary table like:
+
+```text
+Provider        Agent                Solved     Total      Success%   Time (s)
+----------------------------------------------------------------------------
+none            simple_llm_agent     6          8          75.0       170.3
+serpapi         simple_llm_agent     5          8          62.5       198.4
+exa             simple_llm_agent     7          8          87.5       189.1
+parallel        simple_llm_agent     6          8          75.0       210.6
+tavily          simple_llm_agent     6          8          75.0       205.2
+```
+
+Numbers above are illustrative; your results will vary depending on keys, rate limits,
+and model updates.
 
 ---
 
@@ -186,6 +204,39 @@ Examples of task categories:
 - DevOps best practices (Dockerfiles, GitHub Actions, Kubernetes HPAs).
 - Backend / API hardening (FastAPI security, rate limiting).
 - Tooling and infra (modern testing setups, logging, LLM eval harnesses).
+
+---
+
+## How to interpret results (what is “good”?)
+
+The benchmark is intentionally small, so you should treat it as a **directional
+signal**, not a leaderboard:
+
+- **Primary metric – Success%**  
+  - Higher is better. If Exa consistently beats baselines (e.g. +10–20 points over
+    `none` / generic web search), that is strong evidence it helps agents ship more
+    tasks end‑to‑end.
+  - Compare Exa to:
+    - `none` – does *any* web search help on these tasks?
+    - `serpapi` / `tavily` / `parallel` – does Exa win on realistic coding + infra
+      tasks, not just synthetic QA?
+
+- **Secondary metric – Time (s)**  
+  - Lower is better, all else equal. A provider that solves more tasks but takes
+    slightly longer can still be attractive; a provider that is slower *and* solves
+    fewer tasks is clearly worse.
+  - Because providers run in parallel, wall‑clock time per provider is directly
+    comparable.
+
+- **Patterns to look for**
+  - Exa matches or beats generic search on **most tasks**, not just one or two.
+  - Failure cases: where does Exa *not* help, and are those tasks representative of
+    your production workload?
+  - Stability: re‑run MARB on different days or with slightly modified tasks. Exa
+    should remain competitive across reruns.
+
+You can also subset the tasks (e.g. only Docker / k8s questions) and re‑run MARB to see
+how providers behave on a specific vertical that matters to your team.
 
 ---
 
