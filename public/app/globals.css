@@ -187,13 +187,13 @@ body {
 .metrics-wrapper {
   display: flex;
   height: 320px;
-  padding: 0 0.5rem;
+  padding: 0 0.25rem;
 }
 
 .metrics-y-axis {
   display: flex;
   /* align-items: center; Removed to allow stretch/manual sizing */
-  width: 60px;
+  width: 48px;
 }
 
 .metrics-axis-title {
@@ -205,7 +205,7 @@ body {
   color: #000;
   text-transform: uppercase;
   white-space: nowrap;
-  margin-left: 4px;
+  margin-left: 0;
   align-self: center;
   margin-bottom: 60px;
 }
@@ -262,13 +262,14 @@ body {
   bottom: 40px;
   display: flex;
   align-items: flex-end;
-  justify-content: space-around;
-  padding: 0 1rem;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 0 2rem;
 }
 
 .metrics-bar-group {
   position: relative;
-  width: 14%;
+  width: 16%;
   height: 100%;
   /* Added to align bars to bottom */
   display: flex;
@@ -303,8 +304,8 @@ body {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  margin-top: 12px;
-  font-size: 0.85rem;
+  margin-top: 14px;
+  font-size: 0.75rem;
   font-weight: 500;
   color: #000;
   white-space: nowrap;
