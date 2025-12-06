@@ -143,7 +143,10 @@ export default function Page() {
             MARB is a small but realistic benchmark that evaluates web search in the
             context of <strong>LLM agents completing multi-step software tasks</strong>.
             Each task is something an engineer might actually delegate to a capable
-            agent, for example:
+            agent.
+          </p>
+          <p>
+            Unlike generic QA datasets, MARB tasks are designed to be <strong>unsolvable</strong> without external knowledge or hallucination-prone if the model relies solely on training data. They target specific, often niche, library versions or configuration syntax.
           </p>
           <ul>
             <li>
@@ -169,23 +172,50 @@ export default function Page() {
             For each task, the agent can optionally call a search provider, read the
             returned documents, and then synthesize a final answer.
           </p>
+          <pre className="page-code" style={{ marginTop: "1rem" }}>
+            <code>
+              {`@dataclass
+class AgentTask:
+    id: str
+    instruction: str       # e.g. "Find a Python library for OCR..."
+    input_context: str     # e.g. "Use this specific PDF layout..."
+    success_keywords: list # e.g. ["pytesseract", "pdf2image"]`}
+            </code>
+          </pre>
         </section>
 
         <section className="page-section">
           <h2>Agent loop & evaluation protocol</h2>
           <p>
             The benchmark uses a very simple, model-agnostic agent loop with three
-            phases:
+            phases. We keep the loop intentionally simple to isolate <strong>retrieval quality</strong> as the primary variable.
           </p>
+          <pre className="page-code" style={{ marginBottom: "1rem" }}>
+            <code>
+              {`# Pseudo-code of the MARB agent loop
+def run_agent(task, search_client, model):
+    # 1. Plan: Model generates search queries based on task
+    queries = model.plan_queries(task.instruction)
+    
+    # 2. Retrieve: Search API returns raw results
+    search_results = []
+    for q in queries:
+        items = search_client.search(q)
+        search_results.extend(items)
+        
+    # 3. Answer: Model synthesizes final response
+    return model.answer(task.instruction, context=search_results)`}
+            </code>
+          </pre>
           <ol>
             <li>
               <strong>Planning:</strong> Given a MARB task, the model proposes a small
-              set of concrete web search queries.
+              set of concrete web search queries. This tests if the search engine can handle the phrasing an agent naturally produces.
             </li>
             <li>
               <strong>Retrieval:</strong> The benchmark calls a configured web search
               API (e.g. Exa, Parallel, Brave, SerpAPI) with those queries and collects top-k
-              results (URLs, titles, snippets).
+              results. We normalize these into a standard format (URL, title, snippet) to ensure fair comparison.
             </li>
             <li>
               <strong>Answering:</strong> The model receives the original task plus the
@@ -194,14 +224,11 @@ export default function Page() {
           </ol>
           <p>
             To stay focused on retrieval, MARB keeps the LLM backbone fixed (in the
-            reference implementation, a Gemini model via <code>GEMINI_API_KEY</code>)
+            reference implementation, a <strong>Gemini 2.5 Flash</strong> model via <code>GEMINI_API_KEY</code>)
             and only swaps out the search provider.
           </p>
           <p>
-            Each task comes with lightweight <strong>success criteria</strong> (keywords
-            such as specific library imports, YAML fields, or API names). A task is
-            considered solved if all success keywords appear in the agent&apos;s final
-            answer. This is a cheap, deterministic proxy for full human evaluation.
+            Each task comes with lightweight <strong>success criteria</strong>. We use deterministic keyword matching as a proxy for correctness. For example, if a task asks to "extract text from PDFs", finding <code>pytesseract</code> or <code>pdf2image</code> in the answer counts as a success. This avoids the variance and cost of "LLM-as-a-judge" while remaining directionally accurate for engineering tasks.
           </p>
         </section>
 
@@ -213,21 +240,36 @@ export default function Page() {
             <code className="px-1 py-0.5 rounded bg-slate-900 border border-slate-700 text-xs">
               SearchClient
             </code>{" "}
-            interface and plugs in:
+            interface. This abstraction allows us to plug in any search API by simply writing a small adapter class.
+          </p>
+          <pre className="page-code" style={{ marginBottom: "1rem" }}>
+            <code>
+              {`class SearchClient(Protocol):
+    name: str
+    
+    def search(self, query: str, top_k: int = 10) -> List[SearchResult]:
+        """
+        Standard interface for all providers.
+        Returns normalized SearchResult objects.
+        """
+        pass`}
+            </code>
+          </pre>
+          <p>
+            Currently supported providers include:
           </p>
           <ul>
             <li>
-              <strong>No search</strong> – the agent relies only on its pretraining.
+              <strong>No search</strong> – Baseline. The agent relies only on its pretraining.
             </li>
             <li>
-              <strong>Exa</strong> – via the <code>/search</code> API and an{" "}
-              <code>EXA_API_KEY</code>.
+              <strong>Exa</strong> – via the <code>/search</code> API.
             </li>
             <li>
-              <strong>Parallel</strong> – via their Search API (<code>PARALLEL_API_KEY</code>).
+              <strong>Parallel</strong> – via their Search API.
             </li>
             <li>
-              <strong>Brave Search API</strong> – privacy-focused web search (replacing Bing, which is retiring in 2025).
+              <strong>Brave Search API</strong> – privacy-focused web search.
             </li>
             <li>
               <strong>SerpAPI</strong> – a meta-search wrapper around Google and others.
@@ -247,6 +289,43 @@ serpapi         simple_llm_agent     5          8          62.5
 exa             simple_llm_agent     7          8          87.5
 parallel        simple_llm_agent     6          8          75.0
 tavily          simple_llm_agent     6          8          75.0`}
+            </code>
+          </pre>
+        </section>
+
+        <section className="page-section">
+          <h2>How to run the benchmark</h2>
+          <p>
+            The entire benchmark is open source. To run it yourself, you&apos;ll need to
+            set up your environment variables in a <code>.env</code> file:
+          </p>
+          <pre className="page-code" style={{ marginTop: "1rem" }}>
+            <code>
+              {`EXA_API_KEY=...
+GEMINI_API_KEY=...    # The LLM backbone
+PARALLEL_API_KEY=...  # Optional
+SERPAPI_API_KEY=...   # Optional
+TAVILY_API_KEY=...    # Optional`}
+            </code>
+          </pre>
+          <p>
+            Then, you can run the full comparison with a single CLI command. This script
+            iterates through the providers, runs the agent loop for each task, and
+            prints the final summary table.
+          </p>
+          <pre className="page-code" style={{ marginTop: "1rem" }}>
+            <code>
+              {`# Install dependencies
+pip install -r requirements.txt
+
+# Run MARB against all configured providers
+python -m exa_benchmark.cli \\
+  --provider none \\
+  --provider exa \\
+  --provider parallel \\
+  --provider serpapi \\
+  --provider tavily \\
+  --tasks marb_tasks`}
             </code>
           </pre>
         </section>
