@@ -9,10 +9,10 @@ type ProviderMetric = {
 
 const STATIC_METRICS: ProviderMetric[] = [
   { provider: "none", success: 75.0 },
-  { provider: "exa", success: 75.0 },
+  { provider: "exa", success: 87.5 },
   { provider: "serpapi", success: 62.5 },
-  { provider: "parallel", success: 62.5 },
-  { provider: "tavily", success: 0.0 },
+  { provider: "parallel", success: 75.0 },
+  { provider: "tavily", success: 75.0 },
 ];
 
 export default function Page() {
@@ -233,8 +233,9 @@ export default function Page() {
 -----------------------------------------------------------------
 none            simple_llm_agent     6          8          75.0
 serpapi         simple_llm_agent     5          8          62.5
-exa             simple_llm_agent     6          8          75.0
-parallel        simple_llm_agent     5          8          62.5`}
+exa             simple_llm_agent     7          8          87.5
+parallel        simple_llm_agent     6          8          75.0
+tavily          simple_llm_agent     6          8          75.0`}
             </code>
           </pre>
         </section>
