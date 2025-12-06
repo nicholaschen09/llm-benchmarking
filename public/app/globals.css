@@ -148,6 +148,9 @@ body {
   border: 1px solid #e5e7eb;
   background: #ffffff;
   color: #111827;
+  max-width: 600px;
+  margin-left: 0;
+  margin-right: auto;
 }
 
 .metrics-header {
@@ -177,8 +180,7 @@ body {
 
 .metrics-y-axis {
   display: flex;
-  align-items: center;
-  /* margin-right: 0.5rem; REMOVED to connect axes */
+  /* align-items: center; Removed to allow stretch/manual sizing */
   width: 60px;
 }
 
@@ -192,15 +194,17 @@ body {
   text-transform: uppercase;
   white-space: nowrap;
   margin-left: 4px;
+  align-self: center;
+  margin-bottom: 60px;
 }
 
 .metrics-y-labels {
   position: relative;
-  height: 100%;
+  height: calc(100% - 80px); /* Match chart area height (320 - 40 - 40) */
   flex: 1;
   border-right: 1.5px solid #000;
   margin-top: 40px;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; Removed as height is explicit */
 }
 
 .metrics-y-tick {

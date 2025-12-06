@@ -72,7 +72,7 @@ export default function Page() {
                   <div className="metrics-grid-line" style={{ bottom: "60%" }} />
                   <div className="metrics-grid-line" style={{ bottom: "40%" }} />
                   <div className="metrics-grid-line" style={{ bottom: "20%" }} />
-                  <div className="metrics-grid-line" style={{ bottom: "0%" }} />
+                  {/* Bottom line removed from grid-lines so we can layer it on top */}
                 </div>
 
                 <div className="metrics-bars-row">
@@ -93,6 +93,17 @@ export default function Page() {
                     </div>
                   ))}
                 </div>
+
+                {/* X-Axis Line overlaying the bars */}
+                <div
+                  className="metrics-grid-line"
+                  style={{
+                    bottom: "40px",
+                    background: "#000",
+                    height: "1.5px",
+                    zIndex: 10
+                  }}
+                />
               </div>
             </div>
           </section>
