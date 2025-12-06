@@ -8,23 +8,51 @@ providers:
     # Optional: provider-specific default top_k
     default_top_k: 10
 
-  # Example of a generic JSON HTTP search API.
-  # You can adapt this to providers like custom search gateways, etc.
-  - name: other_search
+  # Bing Web Search API (Azure Cognitive Services) example.
+  - name: bing
     type: generic_json_http
-    api_key_env: OTHER_API_KEY
-    api_key_header: Authorization
-    base_url: https://api.example.com/search
+    api_key_env: BING_API_KEY
+    api_key_header: Ocp-Apim-Subscription-Key
+    base_url: https://api.bing.microsoft.com/v7.0/search
     method: GET
     query_param: q
-    # Path (dot-separated) to the list of results inside the JSON response.
-    # For example, if the response is {"data": {"results": [...]}} use "data.results".
-    result_path: results
-    # Fields used to extract information for each result object.
+    # Bing: {"webPages": {"value": [ { "name": ..., "url": ..., "snippet": ... }, ... ]}}
+    result_path: webPages.value
     url_field: url
-    title_field: title
+    title_field: name
     snippet_field: snippet
-    score_field: score
+    score_field: ""
     default_top_k: 10
 
+  # SerpAPI example (Google-like search). SerpAPI uses an "api_key" query param.
+  - name: serpapi
+    type: generic_json_http
+    api_key_env: SERPAPI_API_KEY
+    api_key_header: ""
+    base_url: https://serpapi.com/search
+    method: GET
+    query_param: q
+    # SerpAPI: {"organic_results": [ { "title": ..., "link": ..., "snippet": ... }, ... ]}
+    result_path: organic_results
+    url_field: link
+    title_field: title
+    snippet_field: snippet
+    score_field: ""
+    default_top_k: 10
+
+  # Brave Search API example.
+  - name: brave
+    type: generic_json_http
+    api_key_env: BRAVE_API_KEY
+    api_key_header: X-Subscription-Token
+    base_url: https://api.search.brave.com/res/v1/web/search
+    method: GET
+    query_param: q
+    # Brave: {"web": { "results": [ { "title": ..., "url": ..., "description": ... }, ... ]}}
+    result_path: web.results
+    url_field: url
+    title_field: title
+    snippet_field: description
+    score_field: ""
+    default_top_k: 10
 

@@ -58,12 +58,19 @@ providers:
     api_key_env: EXA_API_KEY
     # Optional: base_url, top_k, extra parameters
 
-  - name: other_search
+  - name: bing
     type: generic_json_http
-    api_key_env: OTHER_API_KEY
-    base_url: https://api.example.com/search
-    method: GET
-    query_param: q
+    api_key_env: BING_API_KEY
+    # ... see comments in providers.example.yaml
+
+  - name: serpapi
+    type: generic_json_http
+    api_key_env: SERPAPI_API_KEY
+    # ... see comments in providers.example.yaml
+
+  - name: brave
+    type: generic_json_http
+    api_key_env: BRAVE_API_KEY
     # ... see comments in providers.example.yaml
 ```
 
@@ -71,7 +78,10 @@ Export your keys in the shell before running:
 
 ```bash
 export EXA_API_KEY="..."
-export OTHER_API_KEY="..."
+export GEMINI_API_KEY="..."
+export BING_API_KEY="..."
+export SERPAPI_API_KEY="..."
+export BRAVE_API_KEY="..."
 ```
 
 ### 3. Run MARB
@@ -80,7 +90,7 @@ The main comparison is between:
 
 - `none` (no web search),
 - `exa` (Exa search),
-- and any other configured provider (e.g., `bing`).
+- and any other configured providers (e.g., `bing`, `serpapi`, `brave`).
 
 Run the benchmark:
 
@@ -88,7 +98,9 @@ Run the benchmark:
 python -m exa_benchmark.cli \
   --provider none \
   --provider exa \
-  --provider other_search \
+  --provider bing \
+  --provider serpapi \
+  --provider brave \
   --tasks marb_tasks
 ```
 

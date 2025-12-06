@@ -74,8 +74,8 @@ class SimpleLLMAgent(Agent):
     """
 
     name: str = "simple_llm_agent"
-    model: str = "gpt-4o-mini"
-    api_key_env: str = "OPENAI_API_KEY"
+    model: str = "gemini-1.5-flash"
+    api_key_env: str = "GEMINI_API_KEY"
     max_search_queries: int = 2
     top_k_docs: int = 5
 
@@ -86,7 +86,7 @@ class SimpleLLMAgent(Agent):
         # If no search is available, directly ask the model to solve the task.
         if search_client is None:
             messages = self._build_direct_messages(task)
-            return _openai_chat(messages, model=self.model, api_key_env=self.api_key_env)
+            return _gemini_chat(messages, model=self.model, api_key_env=self.api_key_env)
 
         # Step 1: Generate search queries.
         search_queries = self._generate_search_queries(task)
@@ -99,7 +99,7 @@ class SimpleLLMAgent(Agent):
 
         # Step 3: Ask the model to solve the task using retrieved docs.
         messages = self._build_answer_messages(task, all_docs, search_queries)
-        return _openai_chat(messages, model=self.model, api_key_env=self.api_key_env)
+        return _gemini_chat(messages, model=self.model, api_key_env=self.api_key_env)
 
     # ------------------------------------------------------------------
     # Prompt helpers
@@ -138,7 +138,7 @@ class SimpleLLMAgent(Agent):
             "role": "user",
             "content": self._format_task_prompt(task) + hint,
         }
-        raw = _openai_chat([system_msg, user_msg], model=self.model, api_key_env=self.api_key_env)
+        raw = _gemini_chat([system_msg, user_msg], model=self.model, api_key_env=self.api_key_env)
 
         # Very lightweight parsing of a numbered list into individual queries.
         queries: List[str] = []
