@@ -162,6 +162,16 @@ export default function Page() {
             <strong>task success rate</strong>: for each provider, what percentage of
             tasks did the agent complete end-to-end?
           </p>
+          <pre className="page-code" style={{ marginTop: "1rem" }}>
+            <code>
+              {`Provider        Agent                Solved     Total      Success%
+-----------------------------------------------------------------
+none            simple_llm_agent     6          8          75.0
+serpapi         simple_llm_agent     5          8          62.5
+exa             simple_llm_agent     6          8          75.0
+parallel        simple_llm_agent     5          8          62.5`}
+            </code>
+          </pre>
         </section>
 
         <section className="page-section">
