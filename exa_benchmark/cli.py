@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import List
 
 import yaml
+from dotenv import load_dotenv
 
 from .eval.marb import (
     format_marb_results,
@@ -60,6 +61,9 @@ def tasks_path(tasks_name: str) -> Path:
 
 
 def main(argv: List[str] | None = None) -> None:
+    # Load environment variables from .env if present
+    load_dotenv()
+
     parser = build_arg_parser()
     args = parser.parse_args(argv)
 

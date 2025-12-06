@@ -13,7 +13,13 @@ env/
 
 # Environment / secrets
 .env
-.env.*
+.env.local
+.env.production
+.env.development
+.env.test
+
+# Explicitly allow the example file
+!.env.example
 
 # OS / editor files
 .DS_Store
