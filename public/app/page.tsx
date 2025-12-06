@@ -328,6 +328,13 @@ python -m exa_benchmark.cli \\
   --tasks marb_tasks`}
             </code>
           </pre>
+          <p>
+            Under the hood, the CLI runs <strong>all selected providers in parallel</strong>{" "}
+            using a thread pool. Each provider gets its own progress bar, so you can see
+            Exa, Parallel, SerpAPI, Tavily, and the no-search baseline all advancing at
+            the same time while the benchmark executes. The summary table at the end
+            includes both success rate and wall-clock time per provider.
+          </p>
         </section>
 
         <section className="page-section">
