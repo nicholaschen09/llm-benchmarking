@@ -1,6 +1,22 @@
+"use client";
+
 import Link from "next/link";
 
+type ProviderMetric = {
+  provider: string;
+  success: number;
+};
+
+const STATIC_METRICS: ProviderMetric[] = [
+  { provider: "none", success: 75.0 },
+  { provider: "exa", success: 75.0 },
+  { provider: "serpapi", success: 62.5 },
+  { provider: "parallel", success: 62.5 },
+  { provider: "tavily", success: 0.0 },
+];
+
 export default function Page() {
+
   return (
     <main className="page-root">
       <div className="page-inner">
@@ -31,6 +47,55 @@ export default function Page() {
               </svg>
             </Link>
           </div>
+
+          <section className="metrics-card" aria-label="MARB results explorer">
+            <div className="metrics-header">
+              <p className="metrics-title">Software engineering</p>
+              <p className="metrics-subtitle">MARB snapshot · 8 tasks</p>
+            </div>
+
+            <div className="metrics-wrapper">
+              <div className="metrics-y-axis">
+                <div className="metrics-axis-title">ACCURACY</div>
+                <div className="metrics-y-labels">
+                  <div className="metrics-y-tick" style={{ bottom: "80%" }}>80</div>
+                  <div className="metrics-y-tick" style={{ bottom: "60%" }}>60</div>
+                  <div className="metrics-y-tick" style={{ bottom: "40%" }}>40</div>
+                  <div className="metrics-y-tick" style={{ bottom: "20%" }}>20</div>
+                  <div className="metrics-y-tick" style={{ bottom: "0%" }}>0</div>
+                </div>
+              </div>
+
+              <div className="metrics-chart-area">
+                <div className="metrics-grid-lines">
+                  <div className="metrics-grid-line" style={{ bottom: "80%" }} />
+                  <div className="metrics-grid-line" style={{ bottom: "60%" }} />
+                  <div className="metrics-grid-line" style={{ bottom: "40%" }} />
+                  <div className="metrics-grid-line" style={{ bottom: "20%" }} />
+                  <div className="metrics-grid-line" style={{ bottom: "0%" }} />
+                </div>
+
+                <div className="metrics-bars-row">
+                  {STATIC_METRICS.map((m) => (
+                    <div key={m.provider} className="metrics-bar-group">
+                      <div
+                        className="metrics-bar-value"
+                        style={{ bottom: `${m.success}%` }}
+                      >
+                        {m.success.toFixed(1)}%
+                      </div>
+                      <div
+                        className={`metrics-bar-fill ${m.provider === "exa" ? "metrics-bar-fill-exa" : ""
+                          }`}
+                        style={{ height: `${m.success}%` }}
+                      />
+                      <div className="metrics-bar-label">{m.provider}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
         </section>
 
         <section className="page-section">

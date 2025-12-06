@@ -140,6 +140,160 @@ body {
   height: 20px;
 }
 
+/* Metrics Chart Styles - Matching SWE-bench Verified Style */
+.metrics-card {
+  margin-top: 1.25rem;
+  padding: 1.5rem 1rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+}
+
+.metrics-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.metrics-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.metrics-subtitle {
+  font-size: 0.95rem;
+  color: #525252;
+  margin: 0.4rem 0 0;
+  font-family: serif;
+}
+
+.metrics-wrapper {
+  display: flex;
+  height: 320px;
+  padding: 0 0.5rem;
+}
+
+.metrics-y-axis {
+  display: flex;
+  align-items: center;
+  /* margin-right: 0.5rem; REMOVED to connect axes */
+  width: 60px;
+}
+
+.metrics-axis-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #000;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+.metrics-y-labels {
+  position: relative;
+  height: 100%;
+  flex: 1;
+  border-right: 1.5px solid #000;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.metrics-y-tick {
+  position: absolute;
+  right: 8px;
+  transform: translateY(50%);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.metrics-chart-area {
+  flex: 1;
+  position: relative;
+}
+
+.metrics-grid-lines {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+}
+
+.metrics-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.metrics-grid-line[style*="bottom: 0%"] {
+  background: #000;
+  height: 1.5px;
+}
+
+.metrics-bars-row {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 0 1rem;
+}
+
+.metrics-bar-group {
+  position: relative;
+  width: 14%;
+  height: 100%;
+  /* Added to align bars to bottom */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.metrics-bar-value {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+}
+
+.metrics-bar-fill {
+  width: 100%;
+  background: #d1d5db;
+  border-radius: 4px 4px 0 0;
+}
+
+.metrics-bar-fill-exa {
+  background: #0047ff;
+}
+
+.metrics-bar-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #000;
+  white-space: nowrap;
+}
+
 code {
   font-family:
     ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -147,40 +301,4 @@ code {
 
 .page-code code {
   font-family: inherit;
-}
-
-.image-grid {
-  margin-top: 1rem;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1rem;
-}
-
-@media (min-width: 768px) {
-  .image-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.image-frame {
-  border-radius: 1rem;
-  border: 1px solid #e5e7eb;
-  background: #f9fafb;
-  padding: 0.75rem 0.75rem 0.9rem;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.image-caption {
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-.image-img {
-  width: 100%;
-  height: auto;
-  border-radius: 0.75rem;
-  display: block;
 }
