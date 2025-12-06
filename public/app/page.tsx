@@ -278,7 +278,10 @@ def run_agent(task, search_client, model):
           <p>
             Running MARB for all of them yields a simple comparison of{" "}
             <strong>task success rate</strong>: for each provider, what percentage of
-            tasks did the agent complete end-to-end?
+            tasks did the agent complete end-to-end? The CLI also records{" "}
+            <strong>wall-clock runtime per provider</strong>, so you can see not just
+            which search engine helps the agent solve more tasks, but how long each one
+            takes to do so.
           </p>
           <pre className="page-code" style={{ marginTop: "1rem" }}>
             <code>
