@@ -1,0 +1,112 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Arial, "Segoe UI", sans-serif;
+}
+
+:root {
+  /* Approximate Exa brand palette */
+  --exa-blue: #0047ff;
+  --exa-blue-deep: #0031c7;
+  --exa-bg: #ffffff;
+  --exa-text: #0047ff;
+  --exa-text-muted: #4b5563;
+}
+
+body {
+  background: var(--exa-bg);
+  color: var(--exa-text);
+}
+
+.page-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.page-hero {
+  padding: 3rem 0 2.5rem;
+}
+
+.page-hero-title {
+  font-size: clamp(2.4rem, 4vw, 3.2rem);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.page-hero-subtitle {
+  margin-top: 1.25rem;
+  max-width: 38rem;
+  font-size: 0.95rem;
+  color: var(--exa-text-muted);
+}
+
+.page-section {
+  margin-top: 2.5rem;
+  max-width: 46rem;
+  color: #111827;
+}
+
+.page-section p {
+  margin: 0.4rem 0;
+  line-height: 1.6;
+}
+
+.page-eyebrow {
+  font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: var(--exa-blue-deep);
+  margin-bottom: 0.75rem;
+}
+
+.page-section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.page-code {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  border-radius: 0.75rem;
+  background: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.4);
+  font-size: 0.8rem;
+  overflow-x: auto;
+}
+
+.page-footer {
+  margin-top: 3rem;
+  padding-bottom: 1.5rem;
+  font-size: 0.7rem;
+  color: var(--exa-text-muted);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+code {
+  font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
+
